@@ -23,6 +23,7 @@
 package main
 
 import (
+	"bufio"
 	"fmt"
 	"os"
 	"strings"
@@ -33,10 +34,12 @@ import (
 const (
 	cliName        = "oui"
 	cliDescription = "search vender information for OUI(Organizationally Unique Identifier)"
-	version        = "v0.1.0"
+	version        = "v0.2.0-dev"
 )
 
 func main() {
+	sc := bufio.NewScanner(os.Stdin)
+
 	app := cli.NewApp()
 	app.Name = cliName
 	app.Usage = cliDescription
@@ -45,11 +48,18 @@ func main() {
 		cli.HelpFlag,
 	}
 	app.Action = func(c *cli.Context) {
-		if c.NArg() == 0 {
+		if c.NArg() == 0 && !sc.Scan() {
 			cli.ShowAppHelp(c)
 		} else {
 			data := InitMalData()
-			var mac = c.Args()[0]
+
+			var mac string
+			if sc.Text() == "" {
+				mac = c.Args()[0]
+			} else {
+				mac = sc.Text()
+			}
+
 			mac = strings.Replace(mac, ":", "", -1)
 			mac = strings.Replace(mac, "-", "", -1)
 			for i := 0; i < len(data); i++ {
