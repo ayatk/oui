@@ -11,6 +11,12 @@ e.g.
     $ oui 000000 # 00-00-00 or 00:00:00
     XEROX CORPORATION
 
+## Installation
+Use `go get` command:
+
+    $ go get github.com/ayatk/oui
+
+
 ## License
 ### OUI(Organizationally Unique Identifier) Data
 Copyright 2016 [IEEE][ieee] - All rights reserved.
