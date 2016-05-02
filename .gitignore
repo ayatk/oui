@@ -1,0 +1,5 @@
+# build dirctory
+pkg/
+
+# direnv file
+.envrc
