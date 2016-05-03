@@ -34,7 +34,7 @@ import (
 const (
 	cliName        = "oui"
 	cliDescription = "search vender information for OUI(Organizationally Unique Identifier)"
-	version        = "v0.2.0-dev"
+	version        = "v0.2.0"
 )
 
 var (
