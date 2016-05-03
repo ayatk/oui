@@ -11,10 +11,24 @@ e.g.
     $ oui 000000 # 00-00-00 or 00:00:00
     XEROX CORPORATION
 
+Use standard input with `input` flag
+
+    $ echo "00:00:00:00:00:00" | oui -i
+    XEROX CORPORATION
+
+`verbose` flag is show detailed information
+
+    $ oui -v 00:00:00:00:00:00
+    OUI/MA-L :      00-00-00
+    Organization :  XEROX CORPORATION
+    Address :       M/S 105-50C WEBSTER NY US 14580
+
 ## Installation
 Use `go get` command:
 
     $ go get github.com/ayatk/oui
+
+or Download binary
 
 
 ## License
