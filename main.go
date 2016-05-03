@@ -46,18 +46,24 @@ func main() {
 	app.Version = version
 	app.Flags = []cli.Flag{
 		cli.HelpFlag,
+		cli.BoolFlag{
+			Name:  "input, i",
+			Usage: "use standard input",
+		},
 	}
 	app.Action = func(c *cli.Context) error {
-		if c.NArg() == 0 && !sc.Scan() {
+		if c.NArg() == 0 && !c.Bool("input") {
 			cli.ShowAppHelp(c)
 		} else {
 			data := InitMalData()
 
 			var mac string
-			if sc.Text() == "" {
-				mac = c.Args()[0]
+			if c.Bool("input") {
+				if sc.Scan() {
+					mac = sc.Text()
+				}
 			} else {
-				mac = sc.Text()
+				mac = c.Args()[0]
 			}
 
 			mac = strings.Replace(mac, ":", "", -1)
