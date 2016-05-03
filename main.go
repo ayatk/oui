@@ -37,6 +37,11 @@ const (
 	version        = "v0.2.0-dev"
 )
 
+var (
+	verbose bool
+	input   bool
+)
+
 func main() {
 	sc := bufio.NewScanner(os.Stdin)
 
@@ -47,18 +52,25 @@ func main() {
 	app.Flags = []cli.Flag{
 		cli.HelpFlag,
 		cli.BoolFlag{
-			Name:  "input, i",
-			Usage: "use standard input",
+			Name:        "verbose, v",
+			Usage:       "print detailed information",
+			Destination: &verbose,
+		},
+		cli.BoolFlag{
+			Name:        "input, i",
+			Usage:       "use standard input",
+			Destination: &input,
 		},
 	}
 	app.Action = func(c *cli.Context) error {
-		if c.NArg() == 0 && !c.Bool("input") {
+
+		if c.NArg() == 0 && !input {
 			cli.ShowAppHelp(c)
 		} else {
 			data := InitMalData()
 
 			var mac string
-			if c.Bool("input") {
+			if input {
 				if sc.Scan() {
 					mac = sc.Text()
 				}
@@ -68,14 +80,23 @@ func main() {
 
 			mac = strings.Replace(mac, ":", "", -1)
 			mac = strings.Replace(mac, "-", "", -1)
-			for i := 0; i < len(data); i++ {
+			for i := range data {
 				if data[i].Hex == strings.ToUpper(mac[0:6]) {
-					fmt.Println(data[i].OrgName)
+					if verbose {
+						split := []string{mac[0:2], mac[2:4], mac[4:6]}
+						fmt.Printf("OUI/%s :      %s\nOrganization :  %s\nAddress :       %s\n", data[i].Registry, strings.Join(split, "-"), data[i].OrgName, data[i].OrgAddress)
+					} else {
+						fmt.Println(data[i].OrgName)
+					}
 					break
 				}
 			}
 		}
 		return nil
+	}
+	cli.VersionFlag = cli.BoolFlag{
+		Name:  "version",
+		Usage: "print oui version",
 	}
 	cli.AppHelpTemplate = `NAME:
    {{.Name}} - {{.Usage}}
