@@ -47,7 +47,7 @@ func main() {
 	app.Flags = []cli.Flag{
 		cli.HelpFlag,
 	}
-	app.Action = func(c *cli.Context) {
+	app.Action = func(c *cli.Context) error {
 		if c.NArg() == 0 && !sc.Scan() {
 			cli.ShowAppHelp(c)
 		} else {
@@ -65,9 +65,11 @@ func main() {
 			for i := 0; i < len(data); i++ {
 				if data[i].Hex == strings.ToUpper(mac[0:6]) {
 					fmt.Println(data[i].OrgName)
+					break
 				}
 			}
 		}
+		return nil
 	}
 	cli.AppHelpTemplate = `NAME:
    {{.Name}} - {{.Usage}}
