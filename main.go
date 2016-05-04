@@ -65,14 +65,19 @@ func main() {
 
 	args, _ := f.Parse()
 
-	if len(args) == 0 && !flag.Input {
-		f.WriteHelp(os.Stdout)
-		os.Exit(1)
-	}
-
 	if flag.Version {
 		fmt.Printf("%s version %s\n", cliName, version)
 		os.Exit(0)
+	}
+
+	if len(args) == 0 {
+		if os.Args[1] == "-h" {
+			os.Exit(0)
+		}
+		if !flag.Input {
+			f.WriteHelp(os.Stdout)
+			os.Exit(1)
+		}
 	}
 
 	data := InitMalData()
