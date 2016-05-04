@@ -1,6 +1,6 @@
 oui
 ====
-[![license](https://img.shields.io/github/license/ayatk/oui.svg?maxAge=2592000?style=flat-square)][license] 
+[![license](https://img.shields.io/github/license/ayatk/oui.svg?maxAge=2592000?style=flat-square)][license]
 [![GitHub release](https://img.shields.io/github/release/ayatk/oui.svg?maxAge=2592000?style=flat-square)][download]  
 search vender information from OUI(Organizationally Unique Identifier)
 
@@ -20,7 +20,7 @@ Use standard input with `input` flag
 
 `verbose` flag is show detailed information
 
-    $ oui -v 00:00:00:00:00:00
+    $ oui  00:00:00:00:00:00 -v
     OUI/MA-L :      00-00-00
     Organization :  XEROX CORPORATION
     Address :       M/S 105-50C WEBSTER NY US 14580
