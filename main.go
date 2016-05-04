@@ -34,7 +34,7 @@ import (
 const (
 	cliName        = "oui"
 	cliDescription = "search vender information for OUI(Organizationally Unique Identifier)"
-	version        = "v0.3.0-dev"
+	version        = "v0.2.1"
 )
 
 // MAC stract is MAC Address date format
