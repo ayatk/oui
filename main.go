@@ -37,13 +37,6 @@ const (
 	version        = "v0.3.0-dev"
 )
 
-var (
-	inputFlag   bool
-	verboseFlag bool
-	versionFlag bool
-	helpFlag    bool
-)
-
 // MAC stract is MAC Address date format
 type MAC struct {
 	Registry   string
