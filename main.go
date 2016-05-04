@@ -72,7 +72,6 @@ func main() {
 
 	args, _ := f.Parse()
 
-	// 引数がひとつもなければヘルプを表示する
 	if len(args) == 0 && !flag.Input {
 		f.WriteHelp(os.Stdout)
 		os.Exit(1)
