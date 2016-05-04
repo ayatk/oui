@@ -1,5 +1,7 @@
 oui
 ====
+[![license](https://img.shields.io/github/license/ayatk/oui.svg?maxAge=2592000?style=flat-square)][license] 
+[![GitHub release](https://img.shields.io/github/release/ayatk/oui.svg?maxAge=2592000?style=flat-square)][download]  
 search vender information from OUI(Organizationally Unique Identifier)
 
 ## Usage
@@ -28,7 +30,7 @@ Use `go get` command:
 
     $ go get github.com/ayatk/oui
 
-or Download binary
+or [Download binary][download]
 
 
 ## License
@@ -41,3 +43,4 @@ Copyright (c) 2016 Aya Tokikaze.
 
 [ieee]: http://www.ieee.org/
 [license]: https://github.com/ayatk/oui/blob/master/LICENSE
+[download]: https://github.com/ayatk/oui/releases
