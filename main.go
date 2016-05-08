@@ -34,7 +34,7 @@ import (
 const (
 	cliName        = "oui"
 	cliDescription = "search vender information for OUI(Organizationally Unique Identifier)"
-	version        = "v0.2.1"
+	version        = "v0.3.0-dev"
 )
 
 // MAC stract is MAC Address date format
@@ -45,27 +45,28 @@ type MAC struct {
 	OrgAddress string
 }
 
-// Flags is list options
-type Flags struct {
+// list options
+type Options struct {
 	Verbose bool `short:"v" long:"verbose" description:"print detailed information"`
 	Input   bool `short:"i" long:"input" description:"use standard input"`
 	Version bool `long:"version" description:"print oui version"`
+	Org     bool `short:"o" long:"org" description:"search organization to OUI"`
 }
 
 func main() {
 
-	var flag Flags
+	var opt Options
 	var mac string
 	var res MAC
 
 	sc := bufio.NewScanner(os.Stdin)
-	f := flags.NewParser(&flag, flags.Default)
+	f := flags.NewParser(&opt, flags.Default)
 	f.Name = "oui"
 	f.Usage = "<ADDRESS> [OPTION]"
 
 	args, _ := f.Parse()
 
-	if flag.Version {
+	if opt.Version {
 		fmt.Printf("%s version %s\n", cliName, version)
 		os.Exit(0)
 	}
@@ -74,7 +75,7 @@ func main() {
 		if os.Args[1] == "-h" {
 			os.Exit(0)
 		}
-		if !flag.Input {
+		if !opt.Input {
 			f.WriteHelp(os.Stdout)
 			os.Exit(1)
 		}
@@ -82,7 +83,7 @@ func main() {
 
 	data := InitMalData()
 
-	if flag.Input && sc.Scan() {
+	if opt.Input && sc.Scan() {
 		mac = sc.Text()
 	} else {
 		mac = args[0]
@@ -98,9 +99,11 @@ func main() {
 		}
 	}
 
-	if flag.Verbose {
+	if opt.Verbose {
 		split := []string{mac[0:2], mac[2:4], mac[4:6]}
-		fmt.Printf("OUI/%s :      %s\nOrganization :  %s\nAddress :       %s\n", res.Registry, strings.Join(split, "-"), res.OrgName, res.OrgAddress)
+		fmt.Printf("OUI/%s :      %s\n", res.Registry, strings.Join(split, "-"))
+		fmt.Printf("Organization :  %s\n", res.OrgName)
+		fmt.Printf("Address :       %s\n", res.OrgAddress)
 	} else {
 		fmt.Println(res.OrgName)
 	}
