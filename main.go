@@ -92,6 +92,15 @@ func main() {
 	mac = strings.Replace(mac, ":", "", -1)
 	mac = strings.Replace(mac, "-", "", -1)
 
+	if opt.Org {
+		for i := range data {
+			if strings.Contains(strings.ToUpper(data[i].OrgName), strings.ToUpper(args[0])) {
+				fmt.Printf("%s:%s:%s  %s\n", data[i].Hex[0:2], data[i].Hex[2:4], data[i].Hex[4:6], data[i].OrgName)
+			}
+		}
+		os.Exit(0)
+	}
+
 	for i := range data {
 		if data[i].Hex == strings.ToUpper(mac[0:6]) {
 			res = data[i]
