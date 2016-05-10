@@ -56,7 +56,8 @@ type Options struct {
 func main() {
 
 	var opt Options
-	var mac string
+	var in string
+	var mac []string
 	var res MAC
 
 	sc := bufio.NewScanner(os.Stdin)
@@ -84,13 +85,10 @@ func main() {
 	data := InitMalData()
 
 	if opt.Input && sc.Scan() {
-		mac = sc.Text()
+		in = sc.Text()
 	} else {
-		mac = args[0]
+		in = args[0]
 	}
-
-	mac = strings.Replace(mac, ":", "", -1)
-	mac = strings.Replace(mac, "-", "", -1)
 
 	if opt.Org {
 		for i := range data {
@@ -101,16 +99,30 @@ func main() {
 		os.Exit(0)
 	}
 
+	if !strings.Contains(in, ":") {
+		os.Exit(0)
+	}
+
+	mac = strings.Split(in, ":")
+
+	for m := range mac {
+		if len(mac[m]) == 1 {
+			mac[m] = "0" + mac[m]
+		}
+	}
+
+	oui := mac[0] + mac[1] + mac[2]
+
 	for i := range data {
-		if data[i].Hex == strings.ToUpper(mac[0:6]) {
+		if data[i].Hex == strings.ToUpper(oui) {
 			res = data[i]
 			break
 		}
 	}
 
 	if opt.Verbose {
-		split := []string{mac[0:2], mac[2:4], mac[4:6]}
-		fmt.Printf("OUI/%s :      %s\n", res.Registry, strings.Join(split, "-"))
+		split := []string{oui[0:2], oui[2:4], oui[4:6]}
+		fmt.Printf("OUI/%s :      %s\n", res.Registry, strings.Join(split, ":"))
 		fmt.Printf("Organization :  %s\n", res.OrgName)
 		fmt.Printf("Address :       %s\n", res.OrgAddress)
 	} else {
