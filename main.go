@@ -122,7 +122,7 @@ func main() {
 
 	if opt.Verbose {
 		split := []string{oui[0:2], oui[2:4], oui[4:6]}
-		fmt.Printf("OUI/%s :      %s\n", res.Registry, strings.Join(split, "-"))
+		fmt.Printf("OUI/%s :      %s\n", res.Registry, strings.Join(split, ":"))
 		fmt.Printf("Organization :  %s\n", res.OrgName)
 		fmt.Printf("Address :       %s\n", res.OrgAddress)
 	} else {

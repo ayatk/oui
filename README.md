@@ -10,18 +10,18 @@ search vender information from OUI(Organizationally Unique Identifier)
 
 e.g.
 
-    $ oui 000000 # 00-00-00 or 00:00:00
+    $ oui 0:0:2:3a:3e:1
     XEROX CORPORATION
 
 Use standard input with `input` flag
 
-    $ echo "00:00:00:00:00:00" | oui -i
+    $ echo "0:0:2:3a:3e:1" | oui -i
     XEROX CORPORATION
 
 `verbose` flag is show detailed information
 
-    $ oui  00:00:00:00:00:00 -v
-    OUI/MA-L :      00-00-00
+    $ oui 0:0:2:3a:3e:1 -v
+    OUI/MA-L :      00:00:02
     Organization :  XEROX CORPORATION
     Address :       M/S 105-50C WEBSTER NY US 14580
 
