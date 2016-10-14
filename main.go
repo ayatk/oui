@@ -23,18 +23,25 @@
 package main
 
 import (
-	"bufio"
+	"flag"
 	"fmt"
+	"io/ioutil"
 	"os"
 	"strings"
+	"syscall"
 
-	flags "github.com/jessevdk/go-flags"
+	"golang.org/x/crypto/ssh/terminal"
 )
 
 const (
 	cliName        = "oui"
-	cliDescription = "search vender information for OUI(Organizationally Unique Identifier)"
+	cliDescription = "Look up vendor information from OUI"
 	version        = "v0.3.0-dev"
+)
+
+var (
+	verboseFlag bool
+	versionFlag bool
 )
 
 // MAC stract is MAC Address date format
@@ -45,87 +52,65 @@ type MAC struct {
 	OrgAddress string
 }
 
-// list options
-type Options struct {
-	Verbose bool `short:"v" long:"verbose" description:"print detailed information"`
-	Input   bool `short:"i" long:"input" description:"use standard input"`
-	Version bool `long:"version" description:"print oui version"`
-	Org     bool `short:"o" long:"org" description:"search organization to OUI"`
-}
-
 func main() {
+	var input []string
+	var oui string
 
-	var opt Options
-	var in string
-	var mac []string
-	var res MAC
+	flag.Usage = func() {
+		fmt.Printf("%s : %s\n", cliName, cliDescription)
+		flag.PrintDefaults()
+	}
 
-	sc := bufio.NewScanner(os.Stdin)
-	f := flags.NewParser(&opt, flags.Default)
-	f.Name = "oui"
-	f.Usage = "<ADDRESS> [OPTION]"
+	flag.BoolVar(&verboseFlag, "v", false, "Print detailed information")
+	flag.BoolVar(&versionFlag, "version", false, "Print oui version")
+	flag.Parse()
 
-	args, _ := f.Parse()
-
-	if opt.Version {
-		fmt.Printf("%s version %s\n", cliName, version)
+	if versionFlag {
+		fmt.Println(version)
 		os.Exit(0)
 	}
-
-	if len(args) == 0 {
-		if os.Args[1] == "-h" {
-			os.Exit(0)
+	// パイプを使用するとき
+	if !terminal.IsTerminal(syscall.Stdin) {
+		body, err := ioutil.ReadAll(os.Stdin)
+		if err != nil {
+			panic(err)
 		}
-		if !opt.Input {
-			f.WriteHelp(os.Stdout)
-			os.Exit(1)
-		}
+		input = strings.Split(string(body), "\n")
+	} else if len(flag.Args()) == 0 { // コマンド単体で使用されたとき
+		fmt.Printf("%s : %s\n", cliName, cliDescription)
+		flag.PrintDefaults()
+		os.Exit(1)
 	}
 
+	if len(input) == 0 {
+		input = flag.Args()
+	}
+
+	// ベンダの情報をインポート
 	data := InitMalData()
 
-	if opt.Input && sc.Scan() {
-		in = sc.Text()
-	} else {
-		in = args[0]
-	}
-
-	if opt.Org {
-		for i := range data {
-			if strings.Contains(strings.ToUpper(data[i].OrgName), strings.ToUpper(args[0])) {
-				fmt.Printf("%s:%s:%s  %s\n", data[i].Hex[0:2], data[i].Hex[2:4], data[i].Hex[4:6], data[i].OrgName)
-			}
+	for _, m := range input {
+		oui = ""
+		mac := parseAddress(m)
+		if len(mac) >= 3 {
+			oui = strings.ToUpper(mac[0] + mac[1] + mac[2])
 		}
-		os.Exit(0)
-	}
-
-	if !strings.Contains(in, ":") {
-		os.Exit(0)
-	}
-
-	mac = strings.Split(in, ":")
-
-	for m := range mac {
-		if len(mac[m]) == 1 {
-			mac[m] = "0" + mac[m]
+		res, isFound := searchOUI(data, oui)
+		if verboseFlag && isFound {
+			split := []string{oui[0:2], oui[2:4], oui[4:6]}
+			fmt.Printf("OUI/%s :      %s\n", res.Registry, strings.Join(split, ":"))
+			fmt.Printf("Organization :  %s\n", res.OrgName)
+			fmt.Printf("Address :       %s\n", res.OrgAddress)
+		} else {
+			fmt.Println(res.OrgName)
 		}
 	}
-
-	oui := mac[0] + mac[1] + mac[2]
-
-	for i := range data {
-		if data[i].Hex == strings.ToUpper(oui) {
-			res = data[i]
-			break
-		}
-	}
-
-	if opt.Verbose {
-		split := []string{oui[0:2], oui[2:4], oui[4:6]}
-		fmt.Printf("OUI/%s :      %s\n", res.Registry, strings.Join(split, ":"))
-		fmt.Printf("Organization :  %s\n", res.OrgName)
-		fmt.Printf("Address :       %s\n", res.OrgAddress)
-	} else {
-		fmt.Println(res.OrgName)
-	}
+	// if opt.Org {
+	// 	for i := range data {
+	// 		if strings.Contains(strings.ToUpper(data[i].OrgName), strings.ToUpper(args[0])) {
+	// 			fmt.Printf("%s:%s:%s  %s\n", data[i].Hex[0:2], data[i].Hex[2:4], data[i].Hex[4:6], data[i].OrgName)
+	// 		}
+	// 	}
+	// 	os.Exit(0)
+	// }
 }
