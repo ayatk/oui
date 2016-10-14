@@ -28,7 +28,6 @@ import (
 	"io/ioutil"
 	"os"
 	"strings"
-	"syscall"
 
 	"golang.org/x/crypto/ssh/terminal"
 )
@@ -36,7 +35,7 @@ import (
 const (
 	cliName        = "oui"
 	cliDescription = "Look up vendor information from OUI"
-	version        = "v0.3.0-dev"
+	version        = "v0.2.3"
 )
 
 var (
@@ -70,7 +69,7 @@ func main() {
 		os.Exit(0)
 	}
 	// パイプを使用するとき
-	if !terminal.IsTerminal(syscall.Stdin) {
+	if !terminal.IsTerminal(0) {
 		body, err := ioutil.ReadAll(os.Stdin)
 		if err != nil {
 			panic(err)
