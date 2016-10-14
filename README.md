@@ -8,19 +8,18 @@ Look up vendor information from OUI (Organizationally Unique Identifier)
 
     $ oui <MAC Address>
 
+or use pipe
+
+    $ echo <MAC Address> | oui
+
 e.g.
 
     $ oui 0:0:2:3a:3e:1
     XEROX CORPORATION
 
-Use standard input with `input` flag
-
-    $ echo "0:0:2:3a:3e:1" | oui -i
-    XEROX CORPORATION
-
 `verbose` flag is show detailed information
 
-    $ oui 0:0:2:3a:3e:1 -v
+    $ oui -v 0:0:2:3a:3e:1
     OUI/MA-L :      00:00:02
     Organization :  XEROX CORPORATION
     Address :       M/S 105-50C WEBSTER NY US 14580
@@ -34,7 +33,7 @@ or [Download binary][download]
 
 
 ## License
-### OUI(Organizationally Unique Identifier) Data
+### OUI (Organizationally Unique Identifier) Data
 Copyright 2016 [IEEE][ieee] - All rights reserved.
 
 ### Source Code
