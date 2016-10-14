@@ -2,7 +2,7 @@ oui
 ====
 [![license](https://img.shields.io/github/license/ayatk/oui.svg?maxAge=2592000?style=flat-square)][license]
 [![GitHub release](https://img.shields.io/github/release/ayatk/oui.svg?maxAge=2592000?style=flat-square)][download]  
-search vender information from OUI(Organizationally Unique Identifier)
+Look up vendor information from OUI (Organizationally Unique Identifier)
 
 ## Usage
 
