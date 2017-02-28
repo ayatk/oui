@@ -43,7 +43,7 @@ var (
 	versionFlag bool
 )
 
-// MAC stract is MAC Address date format
+// MAC struct is MAC Address date format
 type MAC struct {
 	Registry   string
 	Hex        string
