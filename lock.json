@@ -1,0 +1,21 @@
+{
+    "memo": "41dc577951df29ce7ebf8da3a8dda800a46f9d52d6d66bd0cd5615ef837f767d",
+    "projects": [
+        {
+            "name": "golang.org/x/crypto",
+            "branch": "master",
+            "revision": "6c586e17d90a7d08bbbc4069984180dce3b04117",
+            "packages": [
+                "ssh/terminal"
+            ]
+        },
+        {
+            "name": "golang.org/x/sys",
+            "branch": "master",
+            "revision": "dbc2be9168a660ef302e04b6ff6406de6f967473",
+            "packages": [
+                "unix"
+            ]
+        }
+    ]
+}
