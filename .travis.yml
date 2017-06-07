@@ -8,3 +8,5 @@ before_script:
 script:
   - go test
   - go build
+notifications:
+  email: false
