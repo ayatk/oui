@@ -7,3 +7,4 @@ before_script:
   - dep ensure
 script:
   - go test
+  - go build
